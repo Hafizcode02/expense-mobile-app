@@ -7,4 +7,8 @@
     <string name="register">Register</string>
     <string name="already_have_an_account">Already have an account?</string>
     <string name="your_name">Your Name</string>
+    <string name="show_profile">Show Profile</string>
+    <string name="my_blog">My Blog</string>
+    <string name="rp_5_205_000">RP. 5.205.000</string>
+    <string name="total_of_your_expenses">Total of your Expenses</string>
 </resources>

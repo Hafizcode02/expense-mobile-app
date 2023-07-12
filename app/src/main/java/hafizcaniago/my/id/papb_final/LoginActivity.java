@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity;
 public class LoginActivity extends AppCompatActivity {
 
     Button btnToRegister;
+    Button btnToLogin;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -20,5 +21,13 @@ public class LoginActivity extends AppCompatActivity {
             Intent moveActivity = new Intent(getApplicationContext(), RegisterActivity.class);
             startActivity(moveActivity);
         });
+
+        btnToLogin = findViewById(R.id.btnLogin);
+        btnToLogin.setOnClickListener(view -> {
+            Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(moveActivity);
+        });
+
+
     }
 }
