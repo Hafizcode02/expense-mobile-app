@@ -1,4 +1,4 @@
-package hafizcaniago.my.id.papb_final;
+package hafizcaniago.my.id.papb_final.View;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -10,6 +10,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
+
+import hafizcaniago.my.id.papb_final.R;
 
 public class ProfileActivity extends AppCompatActivity {
     AutoCompleteTextView autoCompleteTextView;

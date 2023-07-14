@@ -1,4 +1,4 @@
-package hafizcaniago.my.id.papb_final;
+package hafizcaniago.my.id.papb_final.View;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -10,6 +10,8 @@ import android.webkit.WebViewClient;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.progressindicator.LinearProgressIndicator;
+
+import hafizcaniago.my.id.papb_final.R;
 
 public class WebViewActivity extends AppCompatActivity {
 

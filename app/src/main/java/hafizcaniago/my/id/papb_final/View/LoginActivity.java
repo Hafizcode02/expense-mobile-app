@@ -1,4 +1,4 @@
-package hafizcaniago.my.id.papb_final;
+package hafizcaniago.my.id.papb_final.View;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,13 +6,17 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.util.Objects;
+
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyLogin;
 import hafizcaniago.my.id.papb_final.Data.Response.Login.LoginResponse;
+import hafizcaniago.my.id.papb_final.R;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -40,23 +44,25 @@ public class LoginActivity extends AppCompatActivity {
         edtPassword = findViewById(R.id.edtPassword);
         btnToLogin.setOnClickListener(view -> {
             BodyLogin bodyLogin = new BodyLogin();
-            bodyLogin.setEmail(edtEmail.getText().toString());
-            bodyLogin.setPassword(edtPassword.getText().toString());
+            bodyLogin.setEmail(Objects.requireNonNull(edtEmail.getText()).toString());
+            bodyLogin.setPassword(Objects.requireNonNull(edtPassword.getText()).toString());
 
             RestClient.getService().postLogin(bodyLogin).enqueue(new Callback<LoginResponse>() {
                 @Override
-                public void onResponse(Call<LoginResponse> call, Response<LoginResponse> response) {
-                    Toast.makeText(getApplicationContext(), response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
+                    assert response.body() != null;
+                    String toastMessage = response.body().getMessage().equals("Login Berhasil") ? "Login Success" : "Login Failed";
+                    Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
                     Log.i("Response", response.body().toString());
-                    if(response.body().getMessage().equals("Login Berhasil")){
+                    if (response.body().getMessage().equals("Login Berhasil")) {
                         Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(moveActivity);
                     }
                 }
 
                 @Override
-                public void onFailure(Call<LoginResponse> call, Throwable t) {
-                    Toast.makeText(getApplicationContext(), "Login Gagal", Toast.LENGTH_SHORT).show();
+                public void onFailure(@NonNull Call<LoginResponse> call, @NonNull Throwable t) {
+
                 }
             });
         });
@@ -66,7 +72,9 @@ public class LoginActivity extends AppCompatActivity {
         btnToRegister = findViewById(R.id.btnRegister);
         btnToRegister.setOnClickListener(view -> {
             Intent moveActivity = new Intent(getApplicationContext(), RegisterActivity.class);
+            moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(moveActivity);
+            finish();
         });
     }
 }

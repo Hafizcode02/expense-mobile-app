@@ -1,10 +1,12 @@
-package hafizcaniago.my.id.papb_final;
+package hafizcaniago.my.id.papb_final.View;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.ImageButton;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import hafizcaniago.my.id.papb_final.R;
 
 public class MainActivity extends AppCompatActivity {
 
