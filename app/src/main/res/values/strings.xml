@@ -23,4 +23,9 @@
     <string name="male">Male</string>
     <string name="female">Female</string>
     <string name="gender">Gender</string>
+    <string name="add_expense_data">Add Expense Data</string>
+    <string name="liburan">Liburan</string>
+    <string name="rp_500_000">Rp. 500.000</string>
+    <string name="_2023_07_11">2023-07-11</string>
+    <string name="debit">DEBIT</string>
 </resources>
