@@ -1,5 +1,6 @@
 package hafizcaniago.my.id.papb_final.View;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -27,6 +28,7 @@ public class ProfileActivity extends AppCompatActivity {
         setupDateButton();
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     public void setupGenderAutoComplete() {
         String[] genderList = new String[]{"Male", "Female", "Prefer Not to Say"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(
@@ -37,6 +39,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         autoCompleteTextView = findViewById(R.id.txtGender);
         autoCompleteTextView.setAdapter(adapter);
+
+        autoCompleteTextView.setOnTouchListener((view, motionEvent) -> {
+            if (!autoCompleteTextView.isPopupShowing()) {
+                autoCompleteTextView.showDropDown();
+            }
+            return false;
+        });
 
         autoCompleteTextView.setOnItemClickListener((adapterView, view, i, l) -> Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show());
     }

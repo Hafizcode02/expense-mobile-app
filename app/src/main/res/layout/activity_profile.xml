@@ -35,151 +35,156 @@
             android:textStyle="bold" />
     </LinearLayout>
 
-    <LinearLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:orientation="vertical"
-        android:padding="18dp">
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/email"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/email"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/baseline_email_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtEmail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textEmailAddress" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/fullName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/your_name"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/baseline_account_circle_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtFullName"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPersonName" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
+        android:layout_height="wrap_content">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:padding="18dp">
 
             <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/txtDate"
-                android:layout_width="250dp"
+                android:id="@+id/email"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="@string/date_of_birth"
+                android:hint="@string/email"
                 app:endIconMode="clear_text"
                 app:errorEnabled="true"
-                app:startIconDrawable="@drawable/baseline_calendar_month_24">
+                app:startIconDrawable="@drawable/baseline_email_24">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/edtDateText"
+                    android:id="@+id/edtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textEmailAddress" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/fullName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/your_name"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/baseline_account_circle_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtFullName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPersonName" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/txtDate"
                     android:layout_width="250dp"
                     android:layout_height="wrap_content"
-                    android:inputType="date" />
+                    android:hint="@string/date_of_birth"
+                    app:endIconMode="clear_text"
+                    app:errorEnabled="true"
+                    app:startIconDrawable="@drawable/baseline_calendar_month_24">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/edtDateText"
+                        android:layout_width="250dp"
+                        android:layout_height="wrap_content"
+                        android:inputType="date" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/btnShowDate"
+                    android:layout_width="match_parent"
+                    android:layout_height="65dp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginTop="-10dp"
+                    android:backgroundTint="#D8D8D8"
+                    android:contentDescription="@string/button_to_show_date_picker"
+                    android:paddingTop="5dp"
+                    android:text="@string/select"
+                    android:textColor="@color/black"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/gender"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:hint="@string/gender"
+                app:endIconMode="clear_text"
+                app:startIconDrawable="@drawable/baseline_account_circle_24">
+
+                <AutoCompleteTextView
+                    android:id="@+id/txtGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="none" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/workDepartment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/work"
+                app:endIconMode="clear_text"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/baseline_work_outline_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtWorkDepartment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/password"
+                app:endIconMode="password_toggle"
+                app:errorEnabled="true"
+                app:startIconDrawable="@drawable/baseline_lock_24">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/edtPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="textPassword" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
-                android:id="@+id/btnShowDate"
+                android:id="@+id/btnSave"
                 android:layout_width="match_parent"
-                android:layout_height="65dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="-10dp"
-                android:backgroundTint="#D8D8D8"
-                android:contentDescription="@string/button_to_show_date_picker"
-                android:paddingTop="5dp"
-                android:text="@string/select"
-                android:textColor="@color/black"
-                android:textSize="14sp"
+                android:layout_height="55dp"
+                android:backgroundTint="#03C988"
+                android:text="@string/save_changes"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnLogout"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:backgroundTint="#F45050"
+                android:text="@string/log_out"
                 android:textStyle="bold" />
         </LinearLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/gender"
-            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense.ExposedDropdownMenu"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:hint="@string/gender"
-            app:endIconMode="clear_text"
-            app:startIconDrawable="@drawable/baseline_account_circle_24">
-
-            <AutoCompleteTextView
-                android:id="@+id/txtGender"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textMultiLine" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/workDepartment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/work"
-            app:endIconMode="clear_text"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/baseline_work_outline_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtWorkDepartment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="text" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/password"
-            app:endIconMode="password_toggle"
-            app:errorEnabled="true"
-            app:startIconDrawable="@drawable/baseline_lock_24">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/edtPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="textPassword" />
-
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <Button
-            android:id="@+id/btnSave"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:backgroundTint="#03C988"
-            android:text="@string/save_changes"
-            android:textStyle="bold" />
-
-        <Button
-            android:id="@+id/btnLogout"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:backgroundTint="#F45050"
-            android:text="@string/log_out"
-            android:textStyle="bold" />
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
