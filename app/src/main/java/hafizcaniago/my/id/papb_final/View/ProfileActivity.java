@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,11 +20,14 @@ public class ProfileActivity extends AppCompatActivity {
     TextInputEditText dateEditText;
     Button showDateToSelect;
 
+    ImageButton btnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        setupBackButton();
         setupGenderAutoComplete();
         setupDateButton();
     }
@@ -62,5 +66,11 @@ public class ProfileActivity extends AppCompatActivity {
             datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
             datePicker.addOnPositiveButtonClickListener(selection -> dateEditText.setText(datePicker.getHeaderText()));
         });
+    }
+
+    private void setupBackButton()
+    {
+        btnBack = findViewById(R.id.btnBack);
+        btnBack.setOnClickListener(view -> super.onBackPressed());
     }
 }
