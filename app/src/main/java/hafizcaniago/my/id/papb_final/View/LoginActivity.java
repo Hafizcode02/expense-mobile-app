@@ -1,6 +1,8 @@
 package hafizcaniago.my.id.papb_final.View;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -47,6 +49,8 @@ public class LoginActivity extends AppCompatActivity {
             bodyLogin.setEmail(Objects.requireNonNull(edtEmail.getText()).toString());
             bodyLogin.setPassword(Objects.requireNonNull(edtPassword.getText()).toString());
 
+            @SuppressLint("CommitPrefEdits") SharedPreferences.Editor editor = getSharedPreferences("USER_DATA", MODE_PRIVATE).edit();
+
             RestClient.getService().postLogin(bodyLogin).enqueue(new Callback<LoginResponse>() {
                 @Override
                 public void onResponse(@NonNull Call<LoginResponse> call, @NonNull Response<LoginResponse> response) {
@@ -55,6 +59,9 @@ public class LoginActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
                     Log.i("Response", response.body().toString());
                     if (response.body().getMessage().equals("Login Berhasil")) {
+                        editor.putString("USER_ID", response.body().getData().getId());
+                        editor.putString("USER_FULLNAME", response.body().getData().getFullname());
+                        editor.apply();
                         Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
                         startActivity(moveActivity);
                     }
