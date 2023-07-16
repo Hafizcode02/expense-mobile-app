@@ -22,13 +22,14 @@ import hafizcaniago.my.id.papb_final.Data.Response.Expenses.AllExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.DataItem;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
 import hafizcaniago.my.id.papb_final.Helper.Helper;
+import hafizcaniago.my.id.papb_final.Helper.OnclickListener;
 import hafizcaniago.my.id.papb_final.R;
 import hafizcaniago.my.id.papb_final.View.Adapter.ExpenseAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     ImageButton btnToWebView;
     ImageButton btnToProfile;
@@ -88,7 +89,8 @@ public class MainActivity extends AppCompatActivity {
 
                     Log.i("responseExpense", expenseItem.toString());
 
-                    adapter = new ExpenseAdapter(expenseItem, getApplicationContext());
+                    adapter = new ExpenseAdapter(expenseItem, getApplicationContext(), MainActivity.this);
+                    recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
                     recyclerView.setAdapter(adapter);
                 }
@@ -120,5 +122,10 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Error, Something Wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @Override
+    public void onItemClicked(DataItem dataItem) {
+        Toast.makeText(this, dataItem.getDetail(), Toast.LENGTH_SHORT).show();
     }
 }

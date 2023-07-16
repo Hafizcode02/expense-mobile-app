@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,16 +15,20 @@ import java.util.List;
 
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.DataItem;
 import hafizcaniago.my.id.papb_final.Helper.Helper;
+import hafizcaniago.my.id.papb_final.Helper.OnclickListener;
 import hafizcaniago.my.id.papb_final.R;
 
 public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
     Helper helper = new Helper();
     private List<DataItem> dataExpense;
     private Context mContext;
+    private OnclickListener listener;
 
-    public ExpenseAdapter(List<DataItem> dataExpense, Context mContext) {
+
+    public ExpenseAdapter(List<DataItem> dataExpense, Context mContext, OnclickListener listener) {
         this.dataExpense = dataExpense;
         this.mContext = mContext;
+        this.listener = listener;
     }
 
     @NonNull
@@ -44,6 +49,8 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             throw new RuntimeException(e);
         }
         holder.expenseType.setText(dataExpense.get(position).getPaymentMethod());
+
+        holder.ItemExpense.setOnClickListener(view -> listener.onItemClicked(dataExpense.get(position)));
     }
 
     @Override
@@ -56,6 +63,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView expensePrice;
         TextView expenseDate;
         TextView expenseType;
+        LinearLayout ItemExpense;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +72,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             expensePrice = itemView.findViewById(R.id.ExpensePrice);
             expenseDate = itemView.findViewById(R.id.expenseDate);
             expenseType = itemView.findViewById(R.id.expenseType);
+            ItemExpense = itemView.findViewById(R.id.ItemExpense);
         }
     }
 }
