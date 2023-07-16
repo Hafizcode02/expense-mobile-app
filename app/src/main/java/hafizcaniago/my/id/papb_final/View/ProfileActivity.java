@@ -141,10 +141,14 @@ public class ProfileActivity extends AppCompatActivity {
             BodyUpdateUser bodyUpdateUser = new BodyUpdateUser();
             bodyUpdateUser.setPassword(Objects.requireNonNull(edtPassword.getText()).toString());
             bodyUpdateUser.setFullname(Objects.requireNonNull(edtFullName.getText()).toString());
-            try {
-                bodyUpdateUser.setDob(helper.convertDate(Objects.requireNonNull(dateEditText.getText()).toString(), "SEND"));
-            } catch (ParseException e) {
-                throw new RuntimeException(e);
+            if (dateEditText.getText().toString().equals("")) {
+                bodyUpdateUser.setDob("0000-00-00");
+            } else {
+                try {
+                    bodyUpdateUser.setDob(helper.convertDate(Objects.requireNonNull(dateEditText.getText()).toString(), "SEND"));
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
             }
             bodyUpdateUser.setGender(autoCompleteTextView.getText().toString());
             bodyUpdateUser.setWorkDepartment(Objects.requireNonNull(edtWorkDepartment.getText()).toString());
