@@ -126,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements OnclickListener {
 
     @Override
     public void onItemClicked(DataItem dataItem) {
-        Toast.makeText(this, dataItem.getDetail(), Toast.LENGTH_SHORT).show();
+        Intent moveActivity = new Intent(getApplicationContext(), ManageExpenseData.class);
+        moveActivity.putExtra("ACTION", "EDIT");
+        moveActivity.putExtra("ID", dataItem.getId());
+        startActivity(moveActivity);
     }
 }

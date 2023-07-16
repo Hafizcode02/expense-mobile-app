@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.ShowExpenseResponse;
 import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
 import retrofit2.Call;
@@ -50,12 +51,18 @@ public class ManageExpenseData extends AppCompatActivity {
     String USER_ID;
     String USER_FULLNAME;
 
+    String action;
+    String id;
+
     Helper helper = new Helper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_expense_data);
+
+        action = getIntent().getStringExtra("ACTION");
+        id = getIntent().getStringExtra("ID");
 
         expenseType = findViewById(R.id.txtExpenseType);
         txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
@@ -73,6 +80,7 @@ public class ManageExpenseData extends AppCompatActivity {
         setupExpenseTypeAutoComplete();
         setupPaymentMethodAutoComplete();
         saveExpenseData();
+        showExpenseData();
     }
 
     private boolean checkAllIsNotEmpty() {
@@ -156,7 +164,6 @@ public class ManageExpenseData extends AppCompatActivity {
     }
 
     private void setupButtonBasedOnAction() {
-        String action = getIntent().getStringExtra("ACTION");
         btnSave = findViewById(R.id.btnSave);
         btnDelete = findViewById(R.id.btnDelete);
         headerNavbar = findViewById(R.id.headerNavbar);
@@ -181,8 +188,33 @@ public class ManageExpenseData extends AppCompatActivity {
         });
     }
 
+    private void showExpenseData() {
+        if (action.equals("EDIT")) {
+            RestClient.getService().getExpenseByID(id).enqueue(new Callback<ShowExpenseResponse>() {
+                @Override
+                public void onResponse(Call<ShowExpenseResponse> call, Response<ShowExpenseResponse> response) {
+                    if (response.isSuccessful()) {
+                        expenseType.setText(response.body().getType());
+                        edtAmount.setText(response.body().getPrice());
+                        try {
+                            edtDateText.setText(helper.convertDate(response.body().getDate(), "GET"));
+                        } catch (ParseException e) {
+                            throw new RuntimeException(e);
+                        }
+                        txtPaymentMethod.setText(response.body().getPaymentMethod());
+                        detail.setText(response.body().getDetail());
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<ShowExpenseResponse> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Something Wrong, Please Check Log", Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     private void saveExpenseData() {
-        String action = getIntent().getStringExtra("ACTION");
         btnSave.setOnClickListener(view -> {
             if (checkAllIsNotEmpty()) {
                 if (action.equals("ADD")) {
