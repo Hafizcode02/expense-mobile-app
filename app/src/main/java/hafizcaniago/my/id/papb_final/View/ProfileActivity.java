@@ -15,8 +15,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.textfield.TextInputEditText;
 
+import java.text.ParseException;
+import java.util.Objects;
+
 import hafizcaniago.my.id.papb_final.Api.RestClient;
+import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
 import hafizcaniago.my.id.papb_final.Data.Response.User.ShowUserResponse;
+import hafizcaniago.my.id.papb_final.Data.Response.User.UpdateUserResponse;
+import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -31,6 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     TextInputEditText edtPassword;
     Button showDateToSelect;
     ImageButton btnBack;
+    Button btnSave;
 
     String USER_ID;
     String USER_FULLNAME;
@@ -48,11 +55,13 @@ public class ProfileActivity extends AppCompatActivity {
         edtFullName = findViewById(R.id.edtFullName);
         edtWorkDepartment = findViewById(R.id.edtWorkDepartment);
         edtPassword = findViewById(R.id.edtPassword);
+        btnSave = findViewById(R.id.btnSave);
 
         setupBackButton();
         setupGenderAutoComplete();
         setupDateButton();
         setupProfileData();
+        setupSaveButton();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -97,6 +106,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     private void setupProfileData() {
+        Helper helper = new Helper();
         RestClient.getService().getUserData(USER_ID).enqueue(new Callback<ShowUserResponse>() {
             @Override
             public void onResponse(Call<ShowUserResponse> call, Response<ShowUserResponse> response) {
@@ -104,15 +114,55 @@ public class ProfileActivity extends AppCompatActivity {
                 Log.i("Api Response", response.body().toString());
                 edtEmail.setText(response.body().getEmail());
                 edtFullName.setText(response.body().getFullname());
-                dateEditText.setText(response.body().getDob());
+                try {
+                    String responseDate = response.body().getDob() == null ? "" : helper.convertDate(response.body().getDob(), "GET");
+                    dateEditText.setText(responseDate);
+                } catch (ParseException e) {
+                    throw new RuntimeException(e);
+                }
                 autoCompleteTextView.setText(response.body().getGender());
                 edtWorkDepartment.setText(response.body().getWorkDepartment());
             }
 
             @Override
             public void onFailure(Call<ShowUserResponse> call, Throwable t) {
-
+                Toast.makeText(getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
             }
+        });
+    }
+
+    private void setupSaveButton() {
+        Helper helper = new Helper();
+        btnSave.setOnClickListener(view -> {
+            BodyUpdateUser bodyUpdateUser = new BodyUpdateUser();
+            bodyUpdateUser.setPassword(Objects.requireNonNull(edtPassword.getText()).toString());
+            bodyUpdateUser.setFullname(Objects.requireNonNull(edtFullName.getText()).toString());
+            try {
+                bodyUpdateUser.setDob(helper.convertDate(Objects.requireNonNull(dateEditText.getText()).toString(), "SEND"));
+            } catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+            bodyUpdateUser.setGender(autoCompleteTextView.getText().toString());
+            bodyUpdateUser.setWorkDepartment(Objects.requireNonNull(edtWorkDepartment.getText()).toString());
+
+            RestClient.getService().updateUser(bodyUpdateUser, USER_ID).enqueue(new Callback<UpdateUserResponse>() {
+                @Override
+                public void onResponse(Call<UpdateUserResponse> call, Response<UpdateUserResponse> response) {
+                    String toastMessage;
+                    assert response.body() != null;
+                    if (response.body().getMessage().equals("User Data Updated Successfully")) {
+                        toastMessage = "Update Success";
+                    } else {
+                        toastMessage = "Update Failed";
+                    }
+                    Toast.makeText(getApplicationContext(), toastMessage, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onFailure(Call<UpdateUserResponse> call, Throwable t) {
+                    Toast.makeText(getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
+                }
+            });
         });
     }
 }
