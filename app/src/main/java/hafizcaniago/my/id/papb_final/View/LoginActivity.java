@@ -63,6 +63,7 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("USER_FULLNAME", response.body().getData().getFullname());
                         editor.apply();
                         Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(moveActivity);
                     }
                 }
