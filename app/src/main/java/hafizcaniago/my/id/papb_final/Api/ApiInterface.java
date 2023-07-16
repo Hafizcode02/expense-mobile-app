@@ -5,6 +5,7 @@ import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyRegister;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateExpense;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.DeleteExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.ShowExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.UpdateExpenseResponse;
@@ -16,6 +17,7 @@ import hafizcaniago.my.id.papb_final.Data.Response.User.ShowUserResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.User.UpdateUserResponse;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
@@ -49,4 +51,7 @@ public interface ApiInterface {
 
     @PUT("api/index.php?route=expense")
     Call<UpdateExpenseResponse> updateExpenseByID(@Body BodyUpdateExpense bodyUpdateExpense, @Query("id") String expenseID);
+
+    @DELETE("api/index.php?route=expense")
+    Call<DeleteExpenseResponse> deleteExpenseByID(@Query("id") String expenseID);
 }

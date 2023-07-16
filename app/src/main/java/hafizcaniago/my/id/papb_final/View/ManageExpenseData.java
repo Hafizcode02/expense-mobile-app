@@ -27,6 +27,7 @@ import java.util.TimeZone;
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateExpense;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.DeleteExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.ShowExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.UpdateExpenseResponse;
@@ -83,6 +84,7 @@ public class ManageExpenseData extends AppCompatActivity {
         setupPaymentMethodAutoComplete();
         saveExpenseData();
         showExpenseData();
+        setupDeleteButton();
     }
 
     private boolean checkAllIsNotEmpty() {
@@ -285,4 +287,28 @@ public class ManageExpenseData extends AppCompatActivity {
             }
         });
     }
+
+    private void setupDeleteButton() {
+        btnDelete = findViewById(R.id.btnDelete);
+        btnDelete.setOnClickListener(view -> {
+            if (action.equals("EDIT")) {
+                RestClient.getService().deleteExpenseByID(id).enqueue(new Callback<DeleteExpenseResponse>() {
+                    @Override
+                    public void onResponse(Call<DeleteExpenseResponse> call, Response<DeleteExpenseResponse> response) {
+                        Toast.makeText(ManageExpenseData.this, response.body().getMessage(), Toast.LENGTH_SHORT).show();
+                        Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
+                        moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(moveActivity);
+                        finish();
+                    }
+
+                    @Override
+                    public void onFailure(Call<DeleteExpenseResponse> call, Throwable t) {
+                        Toast.makeText(getApplicationContext(), "Something Wrong, Please Check Log", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
 }
