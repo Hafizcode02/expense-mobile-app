@@ -11,9 +11,10 @@ public class Helper {
     @SuppressLint("SimpleDateFormat")
     public String convertDate(String date, String to) throws ParseException {
         if (to.equals("SEND")) {
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd MMM yyyy");
             Date newDate = sdf.parse(date);
             assert newDate != null;
+            sdf = new SimpleDateFormat("yyyy-MM-dd");
             date = sdf.format(newDate);
             return date;
 
