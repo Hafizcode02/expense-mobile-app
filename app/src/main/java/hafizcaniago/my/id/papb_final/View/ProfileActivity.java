@@ -14,10 +14,14 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Objects;
+import java.util.TimeZone;
 
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
@@ -100,7 +104,13 @@ public class ProfileActivity extends AppCompatActivity {
 
         showDateToSelect.setOnClickListener(view -> {
             datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
-            datePicker.addOnPositiveButtonClickListener(selection -> dateEditText.setText(datePicker.getHeaderText()));
+            datePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) selection -> {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis(selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+                String formattedDate  = format.format(calendar.getTime());
+                dateEditText.setText(formattedDate);
+            });
         });
     }
 
