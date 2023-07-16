@@ -1,6 +1,8 @@
 package hafizcaniago.my.id.papb_final.View;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -12,27 +14,109 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.textfield.TextInputEditText;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Objects;
+import java.util.TimeZone;
+
+import hafizcaniago.my.id.papb_final.Api.RestClient;
+import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
+import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class ManageExpenseData extends AppCompatActivity {
 
     AutoCompleteTextView expenseType;
     AutoCompleteTextView txtPaymentMethod;
     TextView headerNavbar;
+    TextInputEditText edtAmount;
+    TextInputEditText edtDateText;
+    TextInputEditText detail;
 
     Button btnSave;
     Button btnDelete;
+    Button btnShowDate;
     ImageButton btnBack;
+
+    String USER_ID;
+    String USER_FULLNAME;
+
+    Helper helper = new Helper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_expense_data);
 
+        expenseType = findViewById(R.id.txtExpenseType);
+        txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
+        edtAmount = findViewById(R.id.edtAmount);
+        edtDateText = findViewById(R.id.edtDateText);
+        detail = findViewById(R.id.txtDetail);
+
+        SharedPreferences prefs = getSharedPreferences("USER_DATA", MODE_PRIVATE);
+        USER_ID = prefs.getString("USER_ID", "111111");
+        USER_FULLNAME = prefs.getString("USER_FULLNAME", "HAFIZ");
+
         setupBackButton();
+        setupDateButton();
         setupButtonBasedOnAction();
         setupExpenseTypeAutoComplete();
         setupPaymentMethodAutoComplete();
+        saveExpenseData();
+    }
+
+    private boolean checkAllIsNotEmpty() {
+        if (expenseType.getText().toString().length() == 0) {
+            expenseType.setError("Please Select");
+            return false;
+        } else if (txtPaymentMethod.getText().toString().length() == 0) {
+            txtPaymentMethod.setError("Please Select");
+            return false;
+        } else if (edtAmount.getText().toString().length() == 0) {
+            edtAmount.setError("Please Insert total expenses");
+            return false;
+        } else if (edtDateText.getText().toString().length() == 0) {
+            edtDateText.setError("Please Insert");
+            return false;
+        } else if (detail.getText().toString().length() == 0) {
+            detail.setError("Please Insert");
+            return false;
+        }
+
+        return true;
+    }
+
+    public void setupDateButton() {
+        edtDateText = findViewById(R.id.edtDateText);
+        btnShowDate = findViewById(R.id.btnShowDate);
+
+        MaterialDatePicker datePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select Transaction Date").setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .build();
+
+        btnShowDate.setOnClickListener(view -> {
+            datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
+            datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
+                @Override
+                public void onPositiveButtonClick(Long selection) {
+                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                    calendar.setTimeInMillis(selection);
+                    SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+                    String formattedDate  = format.format(calendar.getTime());
+                    edtDateText.setText(formattedDate);
+                }
+            });
+        });
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -90,11 +174,54 @@ public class ManageExpenseData extends AppCompatActivity {
         }
     }
 
-    private void setupBackButton()
-    {
+    private void setupBackButton() {
         btnBack = findViewById(R.id.btnBack);
         btnBack.setOnClickListener(view -> {
             super.onBackPressed();
+        });
+    }
+
+    private void saveExpenseData() {
+        String action = getIntent().getStringExtra("ACTION");
+        btnSave.setOnClickListener(view -> {
+            if (checkAllIsNotEmpty()) {
+                if (action.equals("ADD")) {
+                    BodyPostExpenseData bodyPostExpenseData = new BodyPostExpenseData();
+                    bodyPostExpenseData.setIdUser(Integer.parseInt(USER_ID));
+                    bodyPostExpenseData.setType(expenseType.getText().toString());
+                    bodyPostExpenseData.setPrice(Integer.parseInt(Objects.requireNonNull(edtAmount.getText()).toString()));
+                    bodyPostExpenseData.setPaymentMethod(txtPaymentMethod.getText().toString());
+                    try {
+                        bodyPostExpenseData.setDate(helper.convertDate(edtDateText.getText().toString(), "SEND"));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    bodyPostExpenseData.setDetail(detail.getText().toString());
+
+                    RestClient.getService().postExpense(bodyPostExpenseData).enqueue(new Callback<PostExpenseResponse>() {
+                        @Override
+                        public void onResponse(Call<PostExpenseResponse> call, Response<PostExpenseResponse> response) {
+                            assert response.body() != null;
+                            if (response.body().getMessage().equals("Data Created Successfully")) {
+                                Toast.makeText(getApplicationContext(), "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
+                                moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(moveActivity);
+                                finish();
+                            }else{
+                                Toast.makeText(getApplicationContext(), "Data Failed to Save", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<PostExpenseResponse> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Something Wrong, Please Check Log", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+                } else if (action.equals("EDIT")) {
+                    //
+                }
+            }
         });
     }
 }
