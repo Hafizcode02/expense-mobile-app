@@ -55,7 +55,7 @@ public class ManageExpenseData extends AppCompatActivity {
 
     @SuppressLint("ClickableViewAccessibility")
     private void setupPaymentMethodAutoComplete() {
-        String[] genderList = new String[]{"Cash", "Debt", "Digital Wallet"};
+        String[] genderList = new String[]{"CASH", "DEBT", "E-WALLET"};
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.drop_down_item, genderList);
 
         txtPaymentMethod = findViewById(R.id.txtPaymentMethod);
