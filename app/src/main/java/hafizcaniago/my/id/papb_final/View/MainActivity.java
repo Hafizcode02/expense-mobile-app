@@ -18,6 +18,7 @@ import java.util.Locale;
 
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
+import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -67,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void setupTotalExpense() {
+        Helper helper = new Helper();
         yourExpenseTotal = findViewById(R.id.yourExpenseTotal);
 
         RestClient.getService().getAllExpenseCount(USER_ID).enqueue(new Callback<TotalExpenseResponse>() {
@@ -74,10 +76,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<TotalExpenseResponse> call, Response<TotalExpenseResponse> response) {
                 String expenseFromAPI = response.body().getTotalExpense();
-                Integer valExpense = Integer.parseInt(expenseFromAPI);
-                NumberFormat nf = NumberFormat.getInstance(Locale.US);
-                String number = nf.format(valExpense);
-                yourExpenseTotal.setText("Rp" + number);
+                yourExpenseTotal.setText("Rp" + helper.convertNumber(expenseFromAPI));
             }
 
             @Override

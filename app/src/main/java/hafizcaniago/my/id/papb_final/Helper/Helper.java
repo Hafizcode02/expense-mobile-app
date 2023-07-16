@@ -3,9 +3,11 @@ package hafizcaniago.my.id.papb_final.Helper;
 
 import android.annotation.SuppressLint;
 
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Helper {
     @SuppressLint("SimpleDateFormat")
@@ -27,5 +29,13 @@ public class Helper {
             return date;
         }
         return date;
+    }
+
+    public String convertNumber(String price)
+    {
+        Integer valExpense = Integer.parseInt(price);
+        NumberFormat nf = NumberFormat.getInstance(Locale.US);
+        String number = nf.format(valExpense);
+        return number;
     }
 }
