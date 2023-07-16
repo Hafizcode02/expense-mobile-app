@@ -118,15 +118,12 @@ public class ManageExpenseData extends AppCompatActivity {
 
         btnShowDate.setOnClickListener(view -> {
             datePicker.show(getSupportFragmentManager(), "Material_Date_Picker");
-            datePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener<Long>() {
-                @Override
-                public void onPositiveButtonClick(Long selection) {
-                    Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-                    calendar.setTimeInMillis(selection);
-                    SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
-                    String formattedDate  = format.format(calendar.getTime());
-                    edtDateText.setText(formattedDate);
-                }
+            datePicker.addOnPositiveButtonClickListener((MaterialPickerOnPositiveButtonClickListener<Long>) selection -> {
+                Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+                calendar.setTimeInMillis(selection);
+                SimpleDateFormat format = new SimpleDateFormat("dd MMM yyyy");
+                String formattedDate  = format.format(calendar.getTime());
+                edtDateText.setText(formattedDate);
             });
         });
     }
@@ -146,7 +143,7 @@ public class ManageExpenseData extends AppCompatActivity {
             return false;
         });
 
-        expenseType.setOnItemClickListener((adapterView, view, i, l) -> Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show());
+        expenseType.setOnItemClickListener((adapterView, view, i, l) -> Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -164,7 +161,7 @@ public class ManageExpenseData extends AppCompatActivity {
             return false;
         });
 
-        txtPaymentMethod.setOnItemClickListener((adapterView, view, i, l) -> Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT).show());
+        txtPaymentMethod.setOnItemClickListener((adapterView, view, i, l) -> Toast.makeText(getApplicationContext(), adapterView.getItemAtPosition(i).toString(), Toast.LENGTH_SHORT));
     }
 
     private void setupButtonBasedOnAction() {
