@@ -10,16 +10,20 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.text.NumberFormat;
-import java.util.Locale;
+import java.util.List;
 
 import hafizcaniago.my.id.papb_final.Api.RestClient;
+import hafizcaniago.my.id.papb_final.Data.Response.Expenses.AllExpenseResponse;
+import hafizcaniago.my.id.papb_final.Data.Response.Expenses.DataItem;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
 import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
+import hafizcaniago.my.id.papb_final.View.Adapter.ExpenseAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,6 +38,11 @@ public class MainActivity extends AppCompatActivity {
 
     String USER_ID;
     String USER_FULLNAME;
+
+
+    RecyclerView recyclerView;
+    ExpenseAdapter adapter;
+    List<DataItem> expenseItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +74,33 @@ public class MainActivity extends AppCompatActivity {
         });
 
         setupTotalExpense();
+        setupRecyclerView();
+    }
+
+    public void setupRecyclerView() {
+        recyclerView = findViewById(R.id.recyclerViewExpense);
+
+        RestClient.getService().getAllExpenseItem(USER_ID).enqueue(new Callback<AllExpenseResponse>() {
+            @Override
+            public void onResponse(Call<AllExpenseResponse> call, Response<AllExpenseResponse> response) {
+                if (response.isSuccessful()) {
+                    expenseItem = response.body().getData();
+
+                    Log.i("responseExpense", expenseItem.toString());
+
+                    adapter = new ExpenseAdapter(expenseItem, getApplicationContext());
+                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                    recyclerView.setAdapter(adapter);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<AllExpenseResponse> call, Throwable t) {
+                Toast.makeText(MainActivity.this, "Something Wrong, Check Log for Details", Toast.LENGTH_SHORT).show();
+                Log.i("error", t.toString());
+                Log.i("error", call.toString());
+            }
+        });
     }
 
     private void setupTotalExpense() {
