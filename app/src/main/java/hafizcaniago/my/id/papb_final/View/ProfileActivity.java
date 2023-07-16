@@ -1,6 +1,7 @@
 package hafizcaniago.my.id.papb_final.View;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
@@ -38,6 +39,7 @@ public class ProfileActivity extends AppCompatActivity {
     Button showDateToSelect;
     ImageButton btnBack;
     Button btnSave;
+    Button btnLogout;
 
     String USER_ID;
     String USER_FULLNAME;
@@ -56,12 +58,14 @@ public class ProfileActivity extends AppCompatActivity {
         edtWorkDepartment = findViewById(R.id.edtWorkDepartment);
         edtPassword = findViewById(R.id.edtPassword);
         btnSave = findViewById(R.id.btnSave);
+        btnLogout = findViewById(R.id.btnLogout);
 
         setupBackButton();
         setupGenderAutoComplete();
         setupDateButton();
         setupProfileData();
         setupSaveButton();
+        setupBtnLogout();
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -163,6 +167,16 @@ public class ProfileActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Something Wrong", Toast.LENGTH_SHORT).show();
                 }
             });
+        });
+    }
+
+    private void setupBtnLogout() {
+        btnLogout.setOnClickListener(view -> {
+            getSharedPreferences("USER_DATA", 0).edit().clear().apply();
+            Intent moveActivity = new Intent(getApplicationContext(), LoginActivity.class);
+            moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(moveActivity);
+            finish();
         });
     }
 }
