@@ -3,6 +3,7 @@ package hafizcaniago.my.id.papb_final.Api;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyLogin;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyRegister;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
+import hafizcaniago.my.id.papb_final.Data.Response.Expenses.AllExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Login.LoginResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Register.RegisterResponse;
@@ -31,4 +32,7 @@ public interface ApiInterface {
 
     @GET("api/index.php?route=expenses/count")
     Call<TotalExpenseResponse> getAllExpenseCount(@Query("id") String userID);
+
+    @GET("api/index.php?route=expenses")
+    Call<AllExpenseResponse> getAllExpenseItem(@Query("id") String userID);
 }
