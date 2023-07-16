@@ -1,8 +1,10 @@
 package hafizcaniago.my.id.papb_final.Api;
 
 import hafizcaniago.my.id.papb_final.Data.Body.BodyLogin;
+import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyRegister;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.AllExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Login.LoginResponse;
@@ -35,4 +37,7 @@ public interface ApiInterface {
 
     @GET("api/index.php?route=expenses")
     Call<AllExpenseResponse> getAllExpenseItem(@Query("id") String userID);
+
+    @POST("api/index.php?route=expense")
+    Call<PostExpenseResponse> postExpense(@Body BodyPostExpenseData bodyPostExpenseData);
 }
