@@ -3,9 +3,11 @@ package hafizcaniago.my.id.papb_final.Api;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyLogin;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyRegister;
+import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateExpense;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateUser;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.ShowExpenseResponse;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.UpdateExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.AllExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expenses.TotalExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Login.LoginResponse;
@@ -44,4 +46,7 @@ public interface ApiInterface {
 
     @GET("api/index.php?route=expense")
     Call<ShowExpenseResponse> getExpenseByID(@Query("id") String expenseID);
+
+    @PUT("api/index.php?route=expense")
+    Call<UpdateExpenseResponse> updateExpenseByID(@Body BodyUpdateExpense bodyUpdateExpense, @Query("id") String expenseID);
 }

@@ -26,8 +26,10 @@ import java.util.TimeZone;
 
 import hafizcaniago.my.id.papb_final.Api.RestClient;
 import hafizcaniago.my.id.papb_final.Data.Body.BodyPostExpenseData;
+import hafizcaniago.my.id.papb_final.Data.Body.BodyUpdateExpense;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.PostExpenseResponse;
 import hafizcaniago.my.id.papb_final.Data.Response.Expense.ShowExpenseResponse;
+import hafizcaniago.my.id.papb_final.Data.Response.Expense.UpdateExpenseResponse;
 import hafizcaniago.my.id.papb_final.Helper.Helper;
 import hafizcaniago.my.id.papb_final.R;
 import retrofit2.Call;
@@ -235,7 +237,7 @@ public class ManageExpenseData extends AppCompatActivity {
                         public void onResponse(Call<PostExpenseResponse> call, Response<PostExpenseResponse> response) {
                             assert response.body() != null;
                             if (response.body().getMessage().equals("Data Created Successfully")) {
-                                Toast.makeText(getApplicationContext(), "Data Saved Successfully", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getApplicationContext(), "Expense Saved Successfully", Toast.LENGTH_SHORT).show();
                                 Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
                                 moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(moveActivity);
@@ -251,7 +253,34 @@ public class ManageExpenseData extends AppCompatActivity {
                         }
                     });
                 } else if (action.equals("EDIT")) {
-                    //
+                    BodyUpdateExpense bodyUpdateExpense = new BodyUpdateExpense();
+                    bodyUpdateExpense.setType(expenseType.getText().toString());
+                    bodyUpdateExpense.setPrice(Integer.parseInt(Objects.requireNonNull(edtAmount.getText()).toString()));
+                    bodyUpdateExpense.setPaymentMethod(txtPaymentMethod.getText().toString());
+                    try {
+                        bodyUpdateExpense.setDate(helper.convertDate(edtDateText.getText().toString(), "SEND"));
+                    } catch (ParseException e) {
+                        throw new RuntimeException(e);
+                    }
+                    bodyUpdateExpense.setDetail(detail.getText().toString());
+
+                    RestClient.getService().updateExpenseByID(bodyUpdateExpense, id).enqueue(new Callback<UpdateExpenseResponse>() {
+                        @Override
+                        public void onResponse(Call<UpdateExpenseResponse> call, Response<UpdateExpenseResponse> response) {
+                            if (response.body().getMessage().equals("Data Updated Successfully")) {
+                                Toast.makeText(getApplicationContext(), "Expense Updated Successfully", Toast.LENGTH_SHORT).show();
+                                Intent moveActivity = new Intent(getApplicationContext(), MainActivity.class);
+                                moveActivity.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                                startActivity(moveActivity);
+                                finish();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<UpdateExpenseResponse> call, Throwable t) {
+                            Toast.makeText(getApplicationContext(), "Something Wrong, Please Check Log", Toast.LENGTH_SHORT).show();
+                        }
+                    });
                 }
             }
         });
