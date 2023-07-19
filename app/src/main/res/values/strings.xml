@@ -38,4 +38,5 @@
     <string name="update_text">Update</string>
     <string name="edit_expense">Edit Expense</string>
     <string name="add_expense">Add Expense</string>
+    <string name="insert_data">Insert Data</string>
 </resources>
